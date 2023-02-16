@@ -34,7 +34,6 @@ pipeline {
             steps {
                 sh "sudo docker build -t rehan797/javaimage:${BUILD_NUMBER} ."
             }
-
         }   
 
         stage ('Push to docker hub') {
@@ -42,10 +41,9 @@ pipeline {
                 withCredentials([string(credentialsId: 'DOCKER_HUB', variable: 'Docker_password')]) {
     // some block
                 sh "sudo docker login -u rehan797 -p $Docker_password"
-}
+                }
                 sh "sudo docker push rehan797/javaimage:${BUILD_NUMBER}"
             }
-
         }
 
         stage ('Launching the server in Dev Env') {
@@ -53,7 +51,6 @@ pipeline {
                 sh 'sudo docker rm -f java_App'
                 sh "sudo docker run -d -p 8080:8080 --name java_App rehan797/javaimage:${BUILD_NUMBER} "
             }
-
         } 
 
         stage('Deploy webAPP in QA/Test Env') {
@@ -64,9 +61,7 @@ pipeline {
                     sh "ssh  -o  StrictHostKeyChecking=no ubuntu@54.234.34.169 sudo docker rm -f java_App"
                     sh "ssh ubuntu@54.234.34.169 sudo docker run  -d  -p  8080:8080 --name java_App   rehan797/javaimage:${BUILD_NUMBER}"
                 }
-
             }
-            
         } 
 
         stage('QAT Test') {
@@ -74,9 +69,7 @@ pipeline {
                 
                 retry(10) {
                     sh 'curl --silent http://54.234.34.169:8080/java-web-app/ |  grep Welcome'
-                }
-            
-               
+                }              
             }
         }
 
@@ -94,9 +87,7 @@ pipeline {
                     sh "ssh  -o  StrictHostKeyChecking=no ubuntu@3.87.75.15 sudo docker rm -f java_App"
                     sh "ssh ubuntu@3.87.75.15 sudo docker run  -d  -p  8080:8080 --name java_App   rehan797/javaimage:${BUILD_NUMBER}"
                 }
-
-            }
-            
+            }            
         } 
     }
 }
