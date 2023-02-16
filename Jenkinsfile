@@ -8,7 +8,7 @@ pipeline {
         stage ('SCM') {
             steps {
                 echo "hello"
-                git 'https://github.com/vimallinuxworld13/jenkins-docker-maven-java-webapp.git'
+                git 'https://github.com/rehan797/Java_web_app.git'
             }
         }
 
